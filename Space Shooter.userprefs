@@ -1,0 +1,12 @@
+﻿<Properties StartupItem="Space Shooter.CSharp.Plugins.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Game Assets\Enemy\Scripts\Path.cs">
+    <Files>
+      <File FileName="Assets\Game Assets\Enemy\Scripts\Path.cs" Line="123" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
