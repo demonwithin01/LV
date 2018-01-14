@@ -39,11 +39,14 @@ public abstract class Wave
 
     #region Construction
 
+    /// <summary>
+    /// Configures the wave with the WaveManager object.
+    /// </summary>
+    /// <param name="waveManager">The wave manager object.</param>
     public void Configure( WaveManager waveManager )
     {
         this.WaveManager = waveManager;
-
-        // Default wave delay, prevents zero index issues.
+        
         this._waveDelays = new List<float>();
         this._waveDelayIndex = 0;
     }

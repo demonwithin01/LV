@@ -14,20 +14,14 @@ public class BasicEnemy : MonoBehaviour
 
     [SerializeField]
     private float _maxDistance = 24f;
-
-    [SerializeField]
-    private int _bulletLimit = 3;
-
-    [SerializeField]
-    private GameObject _bulletPrefab;
-
+    
     #endregion
 
     /* --------------------------------------------------------------------- */
 
     #region Class Members
 
-    private List<EnemyBullet> _bulletPool;
+    private EnemyBulletPool _bulletPool;
 
     private int _bulletPoolIndex = 0;
 
@@ -48,16 +42,7 @@ public class BasicEnemy : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        this._bulletPool = new List<EnemyBullet>();
-
-        for ( int i = 0 ; i < this._bulletLimit ; i++ )
-        {
-            GameObject enemyBullet = Instantiate( this._bulletPrefab );
-            EnemyBullet enemyBulletScript = enemyBullet.GetComponent<EnemyBullet>();
-            enemyBulletScript.Initialise( this );
-
-            this._bulletPool.Add( enemyBulletScript );
-        }
+        this._bulletPool = GameObject.FindObjectOfType<EnemyBulletPool>();
     }
 
     // Update is called once per frame
@@ -86,9 +71,7 @@ public class BasicEnemy : MonoBehaviour
 
     public void Fire()
     {
-        this._bulletPool[ this._bulletPoolIndex ].Fire( base.transform.position, Vector3.back );
-
-        this._bulletPoolIndex = ( ++this._bulletPoolIndex ) % this._bulletPool.Count;
+        this._bulletPool.Next.Fire( base.transform.position, Vector3.back );
     }
 
     /// <summary>

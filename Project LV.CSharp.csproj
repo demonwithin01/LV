@@ -71,7 +71,7 @@
   <ItemGroup>
     <Compile Include="Assets\Game Assets\Enemy\Scripts\BasicEnemy.cs" />
     <Compile Include="Assets\Game Assets\Enemy\Scripts\BasicWave.cs" />
-    <Compile Include="Assets\Game Assets\Enemy\Scripts\EnemyBullet.cs" />
+    <Compile Include="Assets\Game Assets\Enemy\Scripts\EnemyBulletPool.cs" />
     <Compile Include="Assets\Game Assets\Enemy\Scripts\Path.cs" />
     <Compile Include="Assets\Game Assets\Enemy\Scripts\PathPoint.cs" />
     <Compile Include="Assets\Game Assets\Enemy\Scripts\Wave.cs" />
@@ -80,9 +80,12 @@
     <Compile Include="Assets\Game Assets\Enemy\Scripts\WavePatternSettings\InitialWaveSettings.cs" />
     <Compile Include="Assets\Game Assets\Enemy\Scripts\WavePatterns\InitialWave.cs" />
     <Compile Include="Assets\Game Assets\Enemy\Scripts\WaveSettings.cs" />
-    <Compile Include="Assets\Game Assets\Player\Scripts\PlayerBullet.cs" />
+    <Compile Include="Assets\Game Assets\Player\Scripts\PlayerBulletPool.cs" />
     <Compile Include="Assets\Game Assets\Player\Scripts\ShipControl.cs" />
+    <Compile Include="Assets\Game Assets\Scripts\Bullet.cs" />
+    <Compile Include="Assets\Game Assets\Scripts\BulletPool.cs" />
     <Compile Include="Assets\Game Assets\Scripts\Layers.cs" />
+    <Compile Include="Assets\Game Assets\Scripts\Ship.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />

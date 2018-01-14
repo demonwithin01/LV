@@ -20,9 +20,7 @@ public class WaveManager : MonoBehaviour
     /* --------------------------------------------------------------------- */
 
     #region Class Members
-
-    private Wave _initialWave;
-
+        
     private Dictionary<string, WaveSettings> _waveSettings;
 
     private Wave _currentWave;
@@ -32,6 +30,11 @@ public class WaveManager : MonoBehaviour
     /* --------------------------------------------------------------------- */
 
     #region Construction
+
+    public WaveManager()
+    {
+        this._enemyTypes = null;
+    }
 
     #endregion
 
@@ -56,15 +59,13 @@ public class WaveManager : MonoBehaviour
         {
             wave.Configure( this );
         }
-
-        this._initialWave = this._waves[ 0 ];
-
+        
         foreach ( WaveSettings settings in waveSettings )
         {
             _waveSettings.Add( settings.WaveName, settings );
         }
 
-        ActivateWave( _initialWave );
+        ActivateWave( this._waves[ 0 ] );
     }
 
     // Update is called once per frame
