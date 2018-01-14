@@ -49,7 +49,6 @@ public class BasicEnemy : MonoBehaviour
     void Start()
     {
         this._bulletPool = new List<EnemyBullet>();
-        this._flightPath = new Path();
 
         for ( int i = 0 ; i < this._bulletLimit ; i++ )
         {
@@ -59,8 +58,6 @@ public class BasicEnemy : MonoBehaviour
 
             this._bulletPool.Add( enemyBulletScript );
         }
-
-        this._flightPath.Initialise( this );
     }
 
     // Update is called once per frame
@@ -92,6 +89,20 @@ public class BasicEnemy : MonoBehaviour
         this._bulletPool[ this._bulletPoolIndex ].Fire( base.transform.position, Vector3.back );
 
         this._bulletPoolIndex = ( ++this._bulletPoolIndex ) % this._bulletPool.Count;
+    }
+
+    /// <summary>
+    /// Sets the flight path that this enemy is to take.
+    /// </summary>
+    /// <param name="path">The flight path to take.</param>
+    /// <param name="delay">The delay before starting the path.</param>
+    public void SetFlightPath( Path path, float delay )
+    {
+        this._flightPath = path.Clone();
+
+        this._flightPath.SetInitialDelay( delay );
+
+        this._flightPath.Initialise( this );
     }
 
     #endregion

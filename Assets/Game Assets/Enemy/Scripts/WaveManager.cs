@@ -8,17 +8,20 @@ public class WaveManager : MonoBehaviour
     /* --------------------------------------------------------------------- */
 
     #region Editable Fields
-        
+
     [SerializeField]
     private Wave[] _waves;
-    
+
+    [SerializeField]
+    private GameObject[] _enemyTypes;
+
     #endregion
 
     /* --------------------------------------------------------------------- */
 
     #region Class Members
 
-    private InitialWave _initialWave;
+    private Wave _initialWave;
 
     private Dictionary<string, WaveSettings> _waveSettings;
 
@@ -39,17 +42,22 @@ public class WaveManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        _initialWave = new InitialWave();
         _waveSettings = new Dictionary<string, WaveSettings>();
 
         WaveSettings[] waveSettings = GetComponents<WaveSettings>();
 
-        if ( _waves == null ) _waves = new Wave[0];
+        if ( _waves == null )
+        {
+            _waves = new Wave[ 1 ];
+            _waves[ 0 ] = new InitialWave();
+        }
 
         foreach ( Wave wave in _waves )
         {
             wave.Configure( this );
         }
+
+        this._initialWave = this._waves[ 0 ];
 
         foreach ( WaveSettings settings in waveSettings )
         {
@@ -96,6 +104,8 @@ public class WaveManager : MonoBehaviour
     /* --------------------------------------------------------------------- */
 
     #region Properties
+
+    public GameObject[] EnemyTypes { get { return this._enemyTypes; } }
 
     #endregion
 

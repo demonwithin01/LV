@@ -61,22 +61,31 @@ public class Path
 
     #region Public Methods
 
+    /// <summary>
+    /// Creates a clone of the path.
+    /// </summary>
+    /// <returns>The clone path.</returns>
+    public Path Clone()
+    {
+        Path clone = new Path();
+
+        //private PathPoint _enterScreenPathPoint;
+
+        clone._waitTime = this._waitTime;
+        clone._enterScreenPathPoint = this._enterScreenPathPoint;
+        clone._pathPoints = new List<PathPoint>();
+        foreach ( PathPoint pathPoint in this._pathPoints )
+        {
+            clone._pathPoints.Add( pathPoint.Clone() );
+        }
+
+        return clone;
+    }
+
     // Use this for initialization
     public void Initialise( BasicEnemy attachedTo )
     {
-        this._pathPoints = new List<PathPoint>();
-
         Debug.Log( "Path Start" );
-
-        // DEBUG
-        this._enterScreenPathPoint = new PathPoint( 0, 0, 100f );
-
-        //this._pathPoints.Add( new PathPoint( 10f, 0f, 100f, 0.5f ) );
-        //this._pathPoints.Add( new PathPoint( 0, 0f, 100f ) );
-        //this._pathPoints.Add( new PathPoint( -10f, 0f, 100f, 0.5f ) );
-
-        /** END DEBUG **/
-
 
         this._currentPathPoint = this._enterScreenPathPoint;
         this._lerpStart = attachedTo.transform.position;
@@ -148,6 +157,15 @@ public class Path
         }
 
         this._pathPoints.Add( point );
+    }
+
+    /// <summary>
+    /// Sets the initial delay for when the path is first started.
+    /// </summary>
+    /// <param name="delay">The delay before starting the path.</param>
+    public void SetInitialDelay( float delay )
+    {
+        this._delay = delay;
     }
 
     #endregion
