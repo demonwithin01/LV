@@ -17,7 +17,7 @@ public abstract class Wave
 
     protected Path[] flightPaths;
 
-    protected BasicEnemy[] enemies;
+    protected List<EnemyShip> enemies;
 
     protected int flightPathIndex = 0;
 
@@ -80,18 +80,7 @@ public abstract class Wave
     #region Protected Methods
 
     public abstract void ApplySettings( WaveSettings settings );
-
-    /// <summary>
-    /// Instantiates an enemy game object and returns the BasicEnemy component.
-    /// </summary>
-    /// <typeparam name="TEnemyType">The script type that is responsible for updating the enemy.</typeparam>
-    /// <param name="enemyTemplate">The game object to use as a basis for creating the new enemy.</param>
-    /// <returns>The script that will be used to update the enemy.</returns>
-    protected TEnemyType InstantiateEnemy<TEnemyType>( GameObject enemyTemplate )
-    {
-        return GameObject.Instantiate<GameObject>( enemyTemplate ).GetComponent<TEnemyType>();
-    }
-
+    
     /// <summary>
     /// Adds a delay for when the next enemy should start moving in.
     /// </summary>

@@ -15,6 +15,15 @@ public class PlayerBulletPool : BulletPool
 
     #region Constructors/Initialisation
 
+    /// <summary>
+    /// Creates a new instances and sets the bullet layer number.
+    /// </summary>
+    public PlayerBulletPool()
+        : base ( Layer.PlayerBullet )
+    {
+
+    }
+
     #endregion
 
     /* ---------------------------------------------------------------------------------------------------------- */

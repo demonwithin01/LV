@@ -10,12 +10,14 @@ public class ShipControl : MonoBehaviour
 
     [SerializeField]
     private float _maxDistance = 24f;
-    
+
     #endregion
 
     /* --------------------------------------------------------------------- */
 
     #region Class Members
+
+    private BulletType _currentBulletType;
 
     private PlayerBulletPool _bulletPool;
 
@@ -30,6 +32,11 @@ public class ShipControl : MonoBehaviour
     /* --------------------------------------------------------------------- */
 
     #region Construction
+
+    public ShipControl()
+    {
+        this._currentBulletType = BulletType.Standard;
+    }
 
     #endregion
 
@@ -106,7 +113,7 @@ public class ShipControl : MonoBehaviour
 
     private void LaunchBulletFrom( Vector3 position )
     {
-        this._bulletPool.Next.Fire( position, Vector3.forward );
+        this._bulletPool.Next( this._currentBulletType ).Fire( position, Vector3.forward );
     }
 
     #endregion

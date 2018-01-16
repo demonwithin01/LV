@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 
 public class WaveManager : MonoBehaviour
@@ -11,10 +10,7 @@ public class WaveManager : MonoBehaviour
 
     [SerializeField]
     private Wave[] _waves;
-
-    [SerializeField]
-    private GameObject[] _enemyTypes;
-
+    
     #endregion
 
     /* --------------------------------------------------------------------- */
@@ -23,7 +19,12 @@ public class WaveManager : MonoBehaviour
         
     private Dictionary<string, WaveSettings> _waveSettings;
 
+    /// <summary>
+    /// Holds a reference to the current wave.
+    /// </summary>
     private Wave _currentWave;
+
+    private EnemyShipPool _enemyShipPool;
 
     #endregion
 
@@ -33,7 +34,7 @@ public class WaveManager : MonoBehaviour
 
     public WaveManager()
     {
-        this._enemyTypes = null;
+        
     }
 
     #endregion
@@ -46,6 +47,7 @@ public class WaveManager : MonoBehaviour
     void Start()
     {
         _waveSettings = new Dictionary<string, WaveSettings>();
+        this._enemyShipPool = GetComponent<EnemyShipPool>();
 
         WaveSettings[] waveSettings = GetComponents<WaveSettings>();
 
@@ -105,8 +107,8 @@ public class WaveManager : MonoBehaviour
     /* --------------------------------------------------------------------- */
 
     #region Properties
-
-    public GameObject[] EnemyTypes { get { return this._enemyTypes; } }
+        
+    public EnemyShipPool EnemyShipPool { get { return this._enemyShipPool; } }
 
     #endregion
 

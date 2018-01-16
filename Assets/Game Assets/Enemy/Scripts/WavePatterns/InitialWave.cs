@@ -49,13 +49,11 @@ public class InitialWave : Wave
 
         base.flightPaths[ 0 ] = path;
 
-        GameObject basicEnemy = base.WaveManager.EnemyTypes[ 0 ];
+        base.enemies = new System.Collections.Generic.List<EnemyShip>();
+        base.enemies.Add( base.WaveManager.EnemyShipPool.Next( EnemyShipType.Standard ) );
+        base.enemies.Add( base.WaveManager.EnemyShipPool.Next( EnemyShipType.Standard ) );
 
-        base.enemies = new BasicEnemy[ 2 ];
-        base.enemies[ 0 ] = base.InstantiateEnemy<BasicEnemy>( basicEnemy );
-        base.enemies[ 1 ] = base.InstantiateEnemy<BasicEnemy>( basicEnemy );
-
-        for ( int i = 0 ; i < base.enemies.Length ; i++ )
+        for ( int i = 0 ; i < base.enemies.Count ; i++ )
         {
             base.enemies[ i ].SetFlightPath( path, base.NextDelay );
         }

@@ -15,6 +15,15 @@ public class EnemyBulletPool : BulletPool
 
     #region Constructors/Initialisation
 
+    /// <summary>
+    /// Creates a new instances and sets the bullet layer number.
+    /// </summary>
+    public EnemyBulletPool()
+        : base ( Layer.EnemyBullet )
+    {
+
+    }
+
     #endregion
 
     /* ---------------------------------------------------------------------------------------------------------- */

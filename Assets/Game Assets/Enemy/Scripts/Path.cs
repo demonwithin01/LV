@@ -18,7 +18,7 @@ public class Path
 
     #region Class Members
 
-    private BasicEnemy _attachedTo;
+    private EnemyShip _attachedTo;
 
     private float _lerpValue = 0f;
 
@@ -83,7 +83,7 @@ public class Path
     }
 
     // Use this for initialization
-    public void Initialise( BasicEnemy attachedTo )
+    public void Initialise( EnemyShip attachedTo )
     {
         Debug.Log( "Path Start" );
 

@@ -33,6 +33,11 @@ public class Bullet : MonoBehaviour
     /// </summary>
     private Vector3 _direction;
 
+    /// <summary>
+    /// Holds the bullet type.
+    /// </summary>
+    private BulletType _bulletType;
+
     #endregion
 
     /* ---------------------------------------------------------------------------------------------------------- */
@@ -49,6 +54,15 @@ public class Bullet : MonoBehaviour
     /* ---------------------------------------------------------------------------------------------------------- */
 
     #region Constructors/Initialisation
+
+    /// <summary>
+    /// Creates a new bullet using the provided bullet type.
+    /// </summary>
+    /// <param name="bulletType">The type of this bullet.</param>
+    public Bullet( BulletType bulletType )
+    {
+        this._bulletType = bulletType;
+    }
 
     /// <summary>
     /// Activates the bullet game object.
@@ -71,7 +85,6 @@ public class Bullet : MonoBehaviour
     {
         if ( Vector3.Distance( this._fireFrom, base.transform.position ) > MAX_DISTANCE )
         {
-            this.gameObject.SetActive( false );
             this.Deactivated( this );
         }
         else
@@ -112,6 +125,23 @@ public class Bullet : MonoBehaviour
     /* ---------------------------------------------------------------------------------------------------------- */
 
     #region Properties
+
+    #endregion
+
+    /* ---------------------------------------------------------------------------------------------------------- */
+
+    #region Derived Properties
+
+    /// <summary>
+    /// Gets the bullet type.
+    /// </summary>
+    public BulletType BulletType
+    {
+        get
+        {
+            return this._bulletType;
+        }
+    }
 
     #endregion
 

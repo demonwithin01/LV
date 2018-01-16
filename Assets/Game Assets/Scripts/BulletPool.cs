@@ -18,18 +18,17 @@ public class BulletPool : MonoBehaviour
     [SerializeField]
     private int _initialCount;
 
-    /// <summary>
-    /// Holds the prefab for instantiating the bullet game objects.
-    /// </summary>
-    [SerializeField]
-    private GameObject _prefab;
-
     #endregion
 
     /* ---------------------------------------------------------------------------------------------------------- */
 
     #region Class Members
-        
+
+    /// <summary>
+    /// Holds the layer of the bullet.
+    /// </summary>
+    private readonly int _bulletLayer;
+
     /// <summary>
     /// Holds the total pool for all bullets.
     /// </summary>
@@ -38,7 +37,12 @@ public class BulletPool : MonoBehaviour
     /// <summary>
     /// Holds the queue for instantiating new bullets.
     /// </summary>
-    private Queue<Bullet> _bulletQueue;
+    private Dictionary<BulletType, Queue<Bullet>> _bulletQueues;
+
+    /// <summary>
+    /// Holds the prefabs for each bullet type.
+    /// </summary>
+    private Dictionary<BulletType, GameObject> _bulletPrefabs;
 
     #endregion
 
@@ -49,12 +53,17 @@ public class BulletPool : MonoBehaviour
     /// <summary>
     /// Instantiates nullable objects.
     /// </summary>
-    public BulletPool()
+    /// <param name="bulletLayer">The collision layer to use for all bullets managed by this pool.</param>
+    public BulletPool( int bulletLayer )
     {
+        this._bulletLayer = bulletLayer;
+
         this._initialCount = 0;
-        this._prefab = null;
         this._bulletPool = new List<Bullet>();
-        this._bulletQueue = new Queue<Bullet>();
+        this._bulletQueues = new Dictionary<BulletType, Queue<Bullet>>();
+        this._bulletPrefabs = new Dictionary<BulletType, GameObject>();
+
+        this._bulletQueues.Add( BulletType.Standard, new Queue<Bullet>() );
     }
 
     #endregion
@@ -73,9 +82,11 @@ public class BulletPool : MonoBehaviour
             throw new Exception( "The initial number of bullets must be greater than zero." );
         }
 
+        LoadPrefab( BulletType.Standard );
+
         for ( int i = 0 ; i < this._initialCount ; i++ )
         {
-            this.CreateBulletInstance();
+            this.CreateBulletInstance( BulletType.Standard );
         }
     }
 
@@ -91,7 +102,32 @@ public class BulletPool : MonoBehaviour
     /// <param name="bullet">The bullet that is to be deactivated.</param>
     public void BulletDeactivated( Bullet bullet )
     {
-        this._bulletQueue.Enqueue( bullet );
+        bullet.gameObject.SetActive( false );
+
+        this._bulletQueues[ bullet.BulletType ].Enqueue( bullet );
+    }
+
+    /// <summary>
+    /// Gets the next bullet in line to be used.
+    /// </summary>
+    /// <param name="bulletType">The type of bullet requested.</param>
+    /// <remarks>
+    /// Automatically creates new instances when/if needed.
+    /// </remarks>
+    public Bullet Next( BulletType bulletType )
+    {
+        Queue<Bullet> queue = this._bulletQueues[ bulletType ];
+
+        if ( queue.Count == 0 )
+        {
+            this.CreateBulletInstance( bulletType );
+        }
+
+        Bullet bullet = queue.Dequeue();
+
+        bullet.gameObject.SetActive( true );
+
+        return bullet;
     }
 
     #endregion
@@ -101,19 +137,42 @@ public class BulletPool : MonoBehaviour
     #region Private Methods
 
     /// <summary>
+    /// Loads a ship prefab from the resources folder.
+    /// </summary>
+    /// <param name="bulletType">The ship type to be loaded.</param>
+    private void LoadPrefab( BulletType bulletType )
+    {
+        this._bulletPrefabs.Add( bulletType, (GameObject)Resources.Load( "Bullets/" + bulletType.ToString(), typeof( GameObject ) ) );
+    }
+
+    /// <summary>
     /// Creates an instance of the bullets and adds it to the appropriate pools/queues.
     /// </summary>
-    private void CreateBulletInstance()
+    /// <param name="bulletType">The type of ship to create an instance of.</param>
+    private void CreateBulletInstance( BulletType bulletType )
     {
-        GameObject bullet = Instantiate( this._prefab );
+        GameObject bullet;
+        Bullet script;
+
+        switch ( bulletType )
+        {
+            default:
+            case BulletType.Standard:
+                bullet = Instantiate( this._bulletPrefabs[ bulletType ] );
+                break;
+        }
+
+        bullet.gameObject.layer = this._bulletLayer;
+        bullet.gameObject.SetActive( false );
+
         bullet.transform.parent = this.transform;
 
-        Bullet script = bullet.GetComponent<Bullet>();
+        script = bullet.GetComponent<Bullet>();
 
         script.Deactivated += BulletDeactivated;
 
         this._bulletPool.Add( script );
-        this._bulletQueue.Enqueue( script );
+        this._bulletQueues[ bulletType ].Enqueue( script );
     }
     
     #endregion
@@ -121,25 +180,6 @@ public class BulletPool : MonoBehaviour
     /* ---------------------------------------------------------------------------------------------------------- */
 
     #region Properties
-
-    /// <summary>
-    /// Gets the next bullet in line to be used.
-    /// </summary>
-    /// <remarks>
-    /// Automatically creates new instances when/if needed.
-    /// </remarks>
-    public Bullet Next
-    {
-        get
-        {
-            if ( this._bulletQueue.Count == 0 )
-            {
-                this.CreateBulletInstance();
-            }
-
-            return this._bulletQueue.Dequeue();
-        }
-    }
 
     #endregion
 
