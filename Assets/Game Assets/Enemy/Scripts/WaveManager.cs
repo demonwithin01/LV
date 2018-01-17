@@ -47,7 +47,7 @@ public class WaveManager : MonoBehaviour
     void Start()
     {
         _waveSettings = new Dictionary<string, WaveSettings>();
-        this._enemyShipPool = GetComponent<EnemyShipPool>();
+        this._enemyShipPool = new EnemyShipPool( this.gameObject );
 
         WaveSettings[] waveSettings = GetComponents<WaveSettings>();
 
@@ -81,6 +81,15 @@ public class WaveManager : MonoBehaviour
     /* --------------------------------------------------------------------- */
 
     #region Public Methods
+
+    /// <summary>
+    /// Called whenever a wave has no enemies left.
+    /// </summary>
+    public void WaveFinished()
+    {
+        // Temp, re-use the current wave.
+        ActivateWave( this._waves[ 0 ] );
+    }
 
     #endregion
 

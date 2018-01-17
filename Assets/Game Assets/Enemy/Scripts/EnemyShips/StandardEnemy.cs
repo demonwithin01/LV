@@ -2,7 +2,7 @@
 /// <summary>
 /// A simple enemy with the standard ship design and standard bullets.
 /// </summary>
-public class BasicEnemy : EnemyShip
+public class StandardEnemy : EnemyShip
 {
 
     /* --------------------------------------------------------------------- */
@@ -24,7 +24,7 @@ public class BasicEnemy : EnemyShip
     /// <summary>
     /// Creates a new basic enemy using the standard ship and bullet types.
     /// </summary>
-    public BasicEnemy()
+    public StandardEnemy()
         : base ( EnemyShipType.Standard, BulletType.Standard )
     {
         

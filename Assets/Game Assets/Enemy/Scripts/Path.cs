@@ -85,10 +85,8 @@ public class Path
     // Use this for initialization
     public void Initialise( EnemyShip attachedTo )
     {
-        Debug.Log( "Path Start" );
-
         this._currentPathPoint = this._enterScreenPathPoint;
-        this._lerpStart = attachedTo.transform.position;
+        this._lerpStart = new Vector3( 0f, 0f, 150f );// attachedTo.transform.position;
 
         this._attachedTo = attachedTo;
 
@@ -189,5 +187,9 @@ public class Path
     #endregion
 
     /* --------------------------------------------------------------------- */
+
+    #region Derived Properties
+        
+    #endregion
 
 }

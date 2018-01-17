@@ -17,12 +17,11 @@ public abstract class Wave
 
     protected Path[] flightPaths;
 
-    protected List<EnemyShip> enemies;
-
-    protected int flightPathIndex = 0;
-
-    private WaveManager _waveManager;
-
+    /// <summary>
+    /// Maintains a list of active enemies for this wave.
+    /// </summary>
+    private List<EnemyShip> enemies;
+    
     /// <summary>
     /// Holds the wave delays that are to be applied to the enemies.
     /// </summary>
@@ -63,7 +62,13 @@ public abstract class Wave
 
     #region Public Methods
 
-    public abstract void Initialise();
+    /// <summary>
+    /// Resets the enemies list.
+    /// </summary>
+    public virtual void Initialise()
+    {
+        this.enemies = new List<EnemyShip>();
+    }
 
     public abstract void Update();
 
@@ -88,6 +93,39 @@ public abstract class Wave
     protected void AddWaveDelay( float delay )
     {
         this._waveDelays.Add( delay );
+    }
+
+    /// <summary>
+    /// Adds an enemy of the provided type to the enemies list.
+    /// </summary>
+    /// <param name="shipType">The enemy type to add.</param>
+    /// <param name="path">The path that this ship is to follow.</param>
+    /// <param name="delay">The delay before this ship launches.</param>
+    protected void AddEnemy( EnemyShipType shipType, Path path, float delay )
+    {
+        EnemyShip ship = this.WaveManager.EnemyShipPool.Next( shipType );
+        
+        ship.Destroyed += ShipDestroyed;
+
+        ship.SetFlightPath( path, delay );
+
+        this.enemies.Add( ship );
+    }
+
+    /// <summary>
+    /// Handles when an enemy ship is destroyed.
+    /// </summary>
+    /// <param name="ship">The enemy ship that has been destroyed.</param>
+    protected void ShipDestroyed( EnemyShip ship )
+    {
+        ship.Destroyed -= ShipDestroyed;
+
+        this.enemies.Remove( ship );
+
+        if ( this.enemies.Count == 0 )
+        {
+            this.WaveManager.WaveFinished();
+        }
     }
 
     #endregion

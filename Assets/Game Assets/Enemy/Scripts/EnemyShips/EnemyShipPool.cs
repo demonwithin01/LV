@@ -1,10 +1,11 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
 /// Manages all instances of enemy ships so that they can be re-used.
 /// </summary>
-public class EnemyShipPool : MonoBehaviour
+public class EnemyShipPool
 {
 
     /* --------------------------------------------------------------------- */
@@ -16,6 +17,11 @@ public class EnemyShipPool : MonoBehaviour
     /* ---------------------------------------------------------------------------------------------------------- */
 
     #region Class Members
+
+    /// <summary>
+    /// Holds a reference to the wave manager game object.
+    /// </summary>
+    private GameObject _waveManagerGameObject;
 
     /// <summary>
     /// Holds the total pool for all enemy ships.
@@ -41,26 +47,16 @@ public class EnemyShipPool : MonoBehaviour
     /// <summary>
     /// Instantiates nullable objects.
     /// </summary>
-    public EnemyShipPool()
+    public EnemyShipPool( GameObject waveManagerGameObject )
     {
+        this._waveManagerGameObject = waveManagerGameObject;
+
         this._enemieShipsPool = new List<EnemyShip>();
         this._enemyShipQueues = new Dictionary<EnemyShipType, Queue<EnemyShip>>();
         this._shipPrefabs = new Dictionary<EnemyShipType, GameObject>();
 
         this._enemyShipQueues.Add( EnemyShipType.Standard, new Queue<EnemyShip>() );
-    }
 
-    #endregion
-
-    /* --------------------------------------------------------------------- */
-
-    #region Unity Methods
-
-    /// <summary>
-    /// Creates the ship pool and queues.
-    /// </summary>
-    private void Start()
-    {
         LoadPrefab( EnemyShipType.Standard );
 
         for ( int i = 0 ; i < 4 ; i++ )
@@ -68,6 +64,12 @@ public class EnemyShipPool : MonoBehaviour
             this.CreateShipInstance( EnemyShipType.Standard );
         }
     }
+
+    #endregion
+
+    /* --------------------------------------------------------------------- */
+
+    #region Unity Methods
 
     #endregion
 
@@ -93,7 +95,7 @@ public class EnemyShipPool : MonoBehaviour
 
         EnemyShip ship = queue.Dequeue();
 
-        ship.gameObject.SetActive( true );
+        ship.Reset();
 
         return ship;
     }
@@ -110,7 +112,14 @@ public class EnemyShipPool : MonoBehaviour
     /// <param name="shipType">The ship type to be loaded.</param>
     private void LoadPrefab( EnemyShipType shipType )
     {
-        this._shipPrefabs.Add( shipType, (GameObject)Resources.Load( "EnemyShips/" + shipType.ToString(), typeof( GameObject ) ) );
+        try
+        {
+            this._shipPrefabs.Add( shipType, (GameObject)Resources.Load( "EnemyShips/" + shipType.ToString(), typeof( GameObject ) ) );
+        }
+        catch( Exception ex )
+        {
+            Debug.Log( ex.Message );
+        }
     }
 
     /// <summary>
@@ -126,12 +135,12 @@ public class EnemyShipPool : MonoBehaviour
         {
             default:
             case EnemyShipType.Standard:
-                ship = Instantiate( this._shipPrefabs[ shipType ] );
+                ship = GameObject.Instantiate( this._shipPrefabs[ shipType ] );
                 break;
         }
 
         ship.SetActive( false );
-        ship.transform.parent = this.transform;
+        ship.transform.parent = this._waveManagerGameObject.transform;
 
         script = ship.GetComponent<EnemyShip>();
 
@@ -147,8 +156,6 @@ public class EnemyShipPool : MonoBehaviour
     /// <param name="enemy">The enemy ship that was destroyed.</param>
     private void EnemyShipDestroyed( EnemyShip enemy )
     {
-        enemy.gameObject.SetActive( false );
-
         this._enemyShipQueues[ enemy.ShipType ].Enqueue( enemy );
     }
 

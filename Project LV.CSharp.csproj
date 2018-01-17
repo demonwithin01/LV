@@ -69,12 +69,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Game Assets\Enemy\Scripts\BasicEnemy.cs" />
     <Compile Include="Assets\Game Assets\Enemy\Scripts\BasicWave.cs" />
     <Compile Include="Assets\Game Assets\Enemy\Scripts\EnemyBulletPool.cs" />
     <Compile Include="Assets\Game Assets\Enemy\Scripts\EnemyShips\EnemyShip.cs" />
     <Compile Include="Assets\Game Assets\Enemy\Scripts\EnemyShips\EnemyShipPool.cs" />
     <Compile Include="Assets\Game Assets\Enemy\Scripts\EnemyShips\EnemyShipType.cs" />
+    <Compile Include="Assets\Game Assets\Enemy\Scripts\EnemyShips\StandardEnemy.cs" />
     <Compile Include="Assets\Game Assets\Enemy\Scripts\Path.cs" />
     <Compile Include="Assets\Game Assets\Enemy\Scripts\PathPoint.cs" />
     <Compile Include="Assets\Game Assets\Enemy\Scripts\Wave.cs" />
@@ -90,6 +90,7 @@
     <Compile Include="Assets\Game Assets\Scripts\Bullets\BulletType.cs" />
     <Compile Include="Assets\Game Assets\Scripts\Bullets\StandardBullet.cs" />
     <Compile Include="Assets\Game Assets\Scripts\Layers.cs" />
+    <Compile Include="Assets\Game Assets\Scripts\ScoreSystem.cs" />
     <Compile Include="Assets\Game Assets\Scripts\Ship.cs" />
   </ItemGroup>
   <ItemGroup>

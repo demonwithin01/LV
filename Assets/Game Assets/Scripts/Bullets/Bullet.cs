@@ -38,6 +38,11 @@ public class Bullet : MonoBehaviour
     /// </summary>
     private BulletType _bulletType;
 
+    /// <summary>
+    /// Holds the damage that this bullet does.
+    /// </summary>
+    protected readonly int damage;
+
     #endregion
 
     /* ---------------------------------------------------------------------------------------------------------- */
@@ -62,6 +67,8 @@ public class Bullet : MonoBehaviour
     public Bullet( BulletType bulletType )
     {
         this._bulletType = bulletType;
+
+        this.damage = 10;
     }
 
     /// <summary>
@@ -98,6 +105,14 @@ public class Bullet : MonoBehaviour
     /* ---------------------------------------------------------------------------------------------------------- */
 
     #region Public Methods
+
+    /// <summary>
+    /// Deactivates the current bullet to prevent new collisions.
+    /// </summary>
+    public void Deactivate()
+    {
+        this.Deactivated( this );
+    }
 
     /// <summary>
     /// Fires this bullet from one location in the specified direction.
@@ -140,6 +155,17 @@ public class Bullet : MonoBehaviour
         get
         {
             return this._bulletType;
+        }
+    }
+
+    /// <summary>
+    /// Gets the damage that this bullet is capable of.
+    /// </summary>
+    public int Damage
+    {
+        get
+        {
+            return this.damage;
         }
     }
 

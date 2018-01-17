@@ -35,6 +35,8 @@ public class InitialWave : Wave
 
     public override void Initialise()
     {
+        base.Initialise();
+
         base.flightPaths = new Path[ 1 ];
 
         Path path = new Path();
@@ -49,14 +51,8 @@ public class InitialWave : Wave
 
         base.flightPaths[ 0 ] = path;
 
-        base.enemies = new System.Collections.Generic.List<EnemyShip>();
-        base.enemies.Add( base.WaveManager.EnemyShipPool.Next( EnemyShipType.Standard ) );
-        base.enemies.Add( base.WaveManager.EnemyShipPool.Next( EnemyShipType.Standard ) );
-
-        for ( int i = 0 ; i < base.enemies.Count ; i++ )
-        {
-            base.enemies[ i ].SetFlightPath( path, base.NextDelay );
-        }
+        base.AddEnemy( EnemyShipType.Standard, path, base.NextDelay );
+        base.AddEnemy( EnemyShipType.Standard, path, base.NextDelay );
     }
 
     public override void Update()

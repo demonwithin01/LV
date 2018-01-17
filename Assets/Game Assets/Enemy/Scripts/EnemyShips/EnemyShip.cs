@@ -43,6 +43,16 @@ public abstract class EnemyShip : MonoBehaviour
     /// </summary>
     private Path _flightPath;
 
+    /// <summary>
+    /// Holds the start location of the ship.
+    /// </summary>
+    private Vector3 _startLocation;
+    
+    /// <summary>
+    /// Holds the health of the ship.
+    /// </summary>
+    protected readonly int startingHealth;
+
     #endregion
 
     /* ---------------------------------------------------------------------------------------------------------- */
@@ -68,6 +78,10 @@ public abstract class EnemyShip : MonoBehaviour
     {
         this._shipType = shipType;
         this._bulletType = BulletType.Standard;
+
+        this.startingHealth = 20;
+
+        this.Points = 10;
     }
 
     #endregion
@@ -79,15 +93,18 @@ public abstract class EnemyShip : MonoBehaviour
     /// <summary>
     /// Finds the bullet pool instance.
     /// </summary>
-    private void Start()
+    protected virtual void Start()
     {
         this._bulletPool = GameObject.FindObjectOfType<EnemyBulletPool>();
+        this._startLocation = new Vector3( 0f, 0f, -150f );
+
+        this.transform.position = this._startLocation;
     }
 
     /// <summary>
     /// Updates the flight path.
     /// </summary>
-    private void Update()
+    protected virtual void Update()
     {
 
         this._flightPath.Update();
@@ -100,9 +117,11 @@ public abstract class EnemyShip : MonoBehaviour
     {
         if ( collider.gameObject.layer == Layer.PlayerBullet )
         {
-            collider.gameObject.SetActive( false );
+            Bullet bullet = collider.gameObject.GetComponent<Bullet>();
 
-            Destroy();
+            PlayerBulletHit( bullet, collider );
+
+            bullet.Deactivate();
         }
     }
 
@@ -134,6 +153,18 @@ public abstract class EnemyShip : MonoBehaviour
         this._flightPath.Initialise( this );
     }
 
+    /// <summary>
+    /// Resets the ship object to it's starting values.
+    /// </summary>
+    public void Reset()
+    {
+        this.Health = this.startingHealth;
+
+        this.transform.position = this._startLocation;
+
+        this.gameObject.SetActive( true );
+    }
+
     #endregion
 
     /* ---------------------------------------------------------------------------------------------------------- */
@@ -141,10 +172,75 @@ public abstract class EnemyShip : MonoBehaviour
     #region Protected Methods
 
     /// <summary>
+    /// Executes the health check that determines whether or not this ship should be destroyed.
+    /// </summary>
+    /// <returns>True if the ship has been destroyed.</returns>
+    protected bool RunHealthCheck()
+    {
+        if ( this.Health < 1 )
+        {
+            Destroy();
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Called whenever a player bullet connects with the ship.
+    /// </summary>
+    /// <param name="bullet">The bullet that connected with the ship.</param>
+    /// <param name="collider">The collider that triggered the collision.</param>
+    protected virtual void PlayerBulletHit( Bullet bullet, Collider collider )
+    {
+        if ( this.Shield > 0 )
+        {
+            this.ReduceShieldBy( bullet.Damage );
+            
+            return;
+        }
+
+        this.Health -= bullet.Damage;
+
+        if ( this.RunHealthCheck() )
+        {
+            ScoreSystem.Current.AddPoints( this.Points );
+        }
+    }
+
+    /// <summary>
+    /// Reduces the shield by the specified amount.
+    /// </summary>
+    /// <param name="reduceBy">The amount to reduce the shield by.</param>
+    protected void ReduceShieldBy( int reduceBy )
+    {
+        this.Shield -= reduceBy;
+
+        if ( this.Shield < 1 )
+        {
+            ShieldDepleted();
+        }
+    }
+
+    /// <summary>
+    /// Called whenever the ship loses its shield.
+    /// </summary>
+    protected virtual void ShieldDepleted()
+    {
+        // Do something...
+        // Why aren't you doing it?
+        // What do you mean I have to tell you what to do?
+        // Fine, I'll tell you what to do later.
+    }
+
+    /// <summary>
     /// Marks the ship as destroyed.
     /// </summary>
-    protected void Destroy()
+    protected virtual void Destroy()
     {
+        this.gameObject.SetActive( false );
+
         this.Destroyed( this );
     }
 
@@ -160,11 +256,37 @@ public abstract class EnemyShip : MonoBehaviour
 
     #region Properties
 
+    /// <summary>
+    /// Gets the current health of the ship.
+    /// </summary>
+    public int Health { get; protected set; }
+
+    /// <summary>
+    /// Gets the shield strength of the ship.
+    /// </summary>
+    public int Shield { get; protected set; }
+
+    /// <summary>
+    /// Gets the number of points this ship is worth when destroyed by the player.
+    /// </summary>
+    public int Points { get; protected set; }
+
     #endregion
 
     /* ---------------------------------------------------------------------------------------------------------- */
 
     #region Derived Properties
+
+    /// <summary>
+    /// Gets the reference to the enemy bullet pool.
+    /// </summary>
+    protected BulletPool BulletPool
+    {
+        get
+        {
+            return this._bulletPool;
+        }
+    }
 
     /// <summary>
     /// Gets the type of the current enemy ship.
@@ -174,6 +296,17 @@ public abstract class EnemyShip : MonoBehaviour
         get
         {
             return this._shipType;
+        }
+    }
+
+    /// <summary>
+    /// Gets the start location of the ship.
+    /// </summary>
+    public Vector3 StartLocation
+    {
+        get
+        {
+            return this._startLocation;
         }
     }
 
